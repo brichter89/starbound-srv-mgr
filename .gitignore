@@ -1,3 +1,6 @@
+/logs/*
+/vendor/*
+
 # gem stuff
 /.bundle/
 /.yardoc
@@ -16,3 +19,14 @@ mkmf.log
 
 # IDE files
 .idea
+
+# misc
+.directory
+
+# Ignore files starting with '#'
+\#*
+
+# Keep all .gitkeep.
+# Directory has to be ignored with an asterisks: /ignore/this/*
+# Else it won't be tracked.
+!.gitkeep
