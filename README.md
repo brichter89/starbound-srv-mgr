@@ -24,7 +24,7 @@ or just *[use it from source](#using-the-source)*.
 Usage
 -----
 
-Well... there is currently nothing to use ;)
+Well... there currently is nothing to use ;)
 
 
 
@@ -99,10 +99,44 @@ Feel free to fork starbound-srv-mgr and add cool new features! See the list of i
 
 1. [Fork it](https://github.com/brichter89/starbound-srv-mgr/fork)
 2. Create your feature branch
+
         $ git checkout -b feature/my-new-cool-feature
+
 3. Commit your changes
+
         $ git add <files>
         $ git commit -m 'Added some cool new feature'
+
 4. Push to the branch
+
         $ git push origin feature/my-new-cool-feature
+
 5. [Create a new Pull Request](https://github.com/feibeck/fussi/compare/) against the develop branch
+
+
+
+
+License
+-------
+
+➜ [LICENSE.txt](LICENSE.txt)
+
+Copyright (c) 2014 Björn Richter <x3ro1989@gmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+Author: Björn R. <x3ro1989@gmail.com>
+
+Date:   2014-08-06
