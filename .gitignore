@@ -24,7 +24,7 @@ mkmf.log
 .directory
 
 # Ignore files starting with '#'
-\#*
+**/\#*
 
 # Keep all .gitkeep.
 # Directory has to be ignored with an asterisks: /ignore/this/*
