@@ -34,7 +34,7 @@ describe StarboundSrvMgr::Config do
         expect(@config.get :π).to eql Math::PI
     end
 
-    it 'should throw an exception if the config key does not exist' do
+    it 'should rise an error if the config key does not exist' do
         expect { @config.get(:i_do_not_exist) }.to raise_error(StarboundSrvMgr::InvalidConfigKeyError)
     end
 
@@ -60,5 +60,13 @@ describe StarboundSrvMgr::Config do
         config_hash[:bazinga] = 'BOOOOM'
 
         expect(config.get :bazinga).to eql 'BAZINGA'
+    end
+
+    it 'should rise an error if the config source is invalid' do
+        expect { StarboundSrvMgr::Config.new(:i_am_invalid) }.to raise_error StarboundSrvMgr::InvalidConfigSourceError
+    end
+
+    it 'should rise an error if the config file does not exist' do
+        expect { StarboundSrvMgr::Config.new(:i_am_invalid) }.to raise_error StarboundSrvMgr::InvalidConfigSourceError
     end
 end

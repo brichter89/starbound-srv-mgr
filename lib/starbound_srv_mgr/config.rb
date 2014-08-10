@@ -12,12 +12,18 @@ module StarboundSrvMgr
         # @param [String|Hash] config_source
         # @return [StarboundSrvMgr::Config]
         def initialize(config_source)
-            raw_config = case config_source
-                             when String
-                                 YAML.load_file config_source
-                             when Hash
-                                 config_source
-                         end
+            case config_source
+                when String
+                    unless File.exists? config_source
+                        raise StarboundSrvMgr::InvalidConfigSourceError, %q{Config file '%s' could not be found} % [config_source]
+                    end
+
+                    raw_config = YAML.load_file config_source
+                when Hash
+                    raw_config = config_source
+                else
+                    raise StarboundSrvMgr::InvalidConfigSourceError, %q{Unexpected config source: %s} % [config_source.to_s]
+            end
 
             # Convert all string keys to symbols.
             @config = raw_config.inject({}) do |memo, (key,value)|
