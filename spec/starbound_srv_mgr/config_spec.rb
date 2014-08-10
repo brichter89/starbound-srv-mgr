@@ -1,7 +1,7 @@
-require 'StarboundSrvMgr/config'
+require 'starbound_srv_mgr/config'
 
 describe StarboundSrvMgr::Config do
-    CONFIG_FILE = __dir__ + '/files/testConfig.yaml'
+    CONFIG_FILE = __dir__ + '/files/test_config.yaml'
 
     # @var StarboundSrvMgr::Config
     @config

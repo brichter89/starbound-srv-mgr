@@ -8,14 +8,14 @@ module StarboundSrvMgr
 
         # Initialize the config object with a configuration file or hash.
         #
-        # @param [String|Hash] config_file
+        # @param [String|Hash] config_source
         # @return [StarboundSrvMgr::Config]
-        def initialize(config_file)
-            @config = case config_file
+        def initialize(config_source)
+            @config = case config_source
                           when String
-                              YAML.load_file config_file
+                              YAML.load_file config_source
                           when Hash
-                              config_file
+                              config_source
                       end
         end
 

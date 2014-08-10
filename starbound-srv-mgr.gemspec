@@ -23,7 +23,7 @@
 
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'StarboundSrvMgr/version'
+require 'starbound_srv_mgr/version'
 
 Gem::Specification.new do |spec|
     spec.name          = 'starbound-srv-mgr'

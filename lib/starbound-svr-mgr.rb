@@ -21,7 +21,7 @@
 # Author: Björn R. <x3ro1989@gmail.com>
 # Date:   2014-08-06
 
-require 'StarboundSrvMgr/version'
+require 'starbound_srv_mgr/version'
 
 module StarboundSrvMgr
     # Your code goes here...
