@@ -90,4 +90,8 @@ describe StarboundSrvMgr::Config do
         expect(config).to be_a Hash
         expect(config[:bazinga]).to eql 'BAZINGA'
     end
+
+    it 'should accept a default value as fallback' do
+        expect(@config.get :i_do_not_exist, 'but f@½# that, im here anyways').to eql 'but f@½# that, im here anyways'
+    end
 end

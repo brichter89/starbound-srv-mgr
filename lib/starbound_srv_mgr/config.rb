@@ -35,16 +35,21 @@ module StarboundSrvMgr
         # Get a config value by key.
         #
         # @param [String|Symbol] key
-        def get(key)
+        # @param [Mixed]         default_value
+        def get(key, default_value = nil)
             key = key.to_sym
 
             return @config.clone if key == :'::'
 
-            unless @config.has_key? key
-                raise StarboundSrvMgr::InvalidConfigKeyError, %q{Config key '%s' not found} % [key]
-            end
+            if @config.has_key? key
+                @config[key]
+            else
+                if default_value.nil?
+                    raise StarboundSrvMgr::InvalidConfigKeyError, %q{Config key '%s' not found} % [key]
+                end
 
-            @config[key]
+                default_value
+            end
         end
 
         # Alias for #get('::')
