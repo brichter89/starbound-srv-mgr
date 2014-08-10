@@ -1,4 +1,5 @@
 require 'starbound_srv_mgr/config'
+require 'starbound_srv_mgr/exceptions'
 
 describe StarboundSrvMgr::Config do
     CONFIG_FILE = __dir__ + '/files/test_config.yaml'
@@ -31,5 +32,9 @@ describe StarboundSrvMgr::Config do
         expect(@config.get :radius_of_earth_km).to eql 6371
         expect(@config.get :enable_gravity).to be true
         expect(@config.get :π).to eql Math::PI
+    end
+
+    it 'should throw an exception if the config key does not exist' do
+        expect { @config.get(:i_do_not_exist) }.to raise_error(StarboundSrvMgr::InvalidConfigKeyError)
     end
 end

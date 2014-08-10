@@ -1,4 +1,5 @@
 require 'yaml'
+require 'starbound_srv_mgr/exceptions'
 
 module StarboundSrvMgr
     class Config
@@ -23,7 +24,13 @@ module StarboundSrvMgr
         #
         # @param [String|Symbol] key
         def get(key)
-            @config[key.to_s]
+            key = key.to_s
+
+            unless @config.has_key? key
+                raise StarboundSrvMgr::InvalidConfigKeyError, %q{Config key '%s' not found} % [key]
+            end
+
+            @config[key]
         end
 
     end
