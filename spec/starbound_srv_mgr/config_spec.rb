@@ -52,7 +52,7 @@ describe StarboundSrvMgr::Config do
         expect(config_2.get(:bazinga)).to eql bazinga
     end
 
-    it 'should hold a copy of the given hash to prevent manipulation' do
+    it 'should hold a clone of the given hash to prevent manipulation' do
         config_hash = { :bazinga => 'BAZINGA' }
         config = StarboundSrvMgr::Config.new(config_hash)
 
@@ -68,5 +68,24 @@ describe StarboundSrvMgr::Config do
 
     it 'should rise an error if the config file does not exist' do
         expect { StarboundSrvMgr::Config.new(:i_am_invalid) }.to raise_error StarboundSrvMgr::InvalidConfigSourceError
+    end
+
+    it 'should return the whole config hash if requested key is \'::\'' do
+        config = @config.get('::')
+        expect(config).to be_a Hash
+        expect(config[:bazinga]).to eql 'BAZINGA'
+    end
+
+    it 'should return a clone of the whole config hash if requested key is \'::\' to prevent manipulation' do
+        # Manipulation
+        @config.get('::')[:bazinga] = 'BOOOOM'
+
+        expect(@config.get('::')[:bazinga]).to eql 'BAZINGA'
+    end
+
+    it 'should have an alias for #get(\'::\') named #getAll()' do
+        config = @config.get_all
+        expect(config).to be_a Hash
+        expect(config[:bazinga]).to eql 'BAZINGA'
     end
 end

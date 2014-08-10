@@ -38,11 +38,18 @@ module StarboundSrvMgr
         def get(key)
             key = key.to_sym
 
+            return @config.clone if key == :'::'
+
             unless @config.has_key? key
                 raise StarboundSrvMgr::InvalidConfigKeyError, %q{Config key '%s' not found} % [key]
             end
 
             @config[key]
+        end
+
+        # Alias for #get('::')
+        def get_all
+            get('::')
         end
 
     end
