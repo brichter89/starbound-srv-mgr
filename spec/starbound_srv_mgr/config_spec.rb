@@ -32,6 +32,8 @@ describe StarboundSrvMgr::Config do
         expect(@config.get :radius_of_earth_km).to eql 6371
         expect(@config.get :enable_gravity).to be true
         expect(@config.get :π).to eql Math::PI
+        expect(@config.get :superheroes).to be_an Array
+        expect(@config.get :chemical_elements).to be_a Hash
     end
 
     it 'should rise an error if the config key does not exist' do
