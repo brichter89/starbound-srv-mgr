@@ -94,4 +94,19 @@ describe StarboundSrvMgr::Config do
     it 'should accept a default value as fallback' do
         expect(@config.get :i_do_not_exist, 'but f@½# that, im here anyways').to eql 'but f@½# that, im here anyways'
     end
+
+    it 'should convert all string hash keys to symbols' do
+        expect(@config.get_all.has_key? 'bazinga').to be false
+        expect(@config.get_all.has_key? :bazinga).to be true
+        expect(@config.get(:these_keys_should_be).has_key? :symbols).to be true
+        expect(@config.get(:these_keys_should_be)[:symbols].has_key? :sym1).to be true
+        expect(@config.get(:these_keys_should_be)[:hybrid].has_key? :sym).to be true
+    end
+
+    it 'should not convert numeric hash or array keys to symbols' do
+        expect(@config.get(:these_keys_should_be)[:numeric_1]).to be_an Hash
+        expect(@config.get(:these_keys_should_be)[:numeric_1].has_key? 10).to be true
+        expect(@config.get(:these_keys_should_be)[:numeric_2]).to be_an Array
+        expect(@config.get(:these_keys_should_be)[:hybrid].has_key? 1337).to be true
+    end
 end

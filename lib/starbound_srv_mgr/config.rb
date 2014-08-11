@@ -1,4 +1,5 @@
 require 'yaml'
+require 'active_support/core_ext/hash'
 require 'starbound_srv_mgr/exceptions'
 
 module StarboundSrvMgr
@@ -25,11 +26,7 @@ module StarboundSrvMgr
                     raise StarboundSrvMgr::InvalidConfigSourceError, %q{Unexpected config source: %s} % [config_source.to_s]
             end
 
-            # Convert all string keys to symbols.
-            @config = raw_config.inject({}) do |memo, (key,value)|
-                memo[key.to_sym] = value
-                memo
-            end
+            @config = raw_config.deep_symbolize_keys
         end
 
         # Get a config value by key.
