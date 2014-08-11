@@ -42,6 +42,8 @@ these_keys_should_be:
         - "zero"
         - "one"
         - "two"
+    numeric_3:
+        1.2: 'one point two'
     hybrid:
         sym: "<- symbol"
         1337: "<- numeric"

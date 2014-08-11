@@ -130,6 +130,19 @@ describe StarboundSrvMgr::Config do
         expect(@config.get(:these_keys_should_be)[:numeric_1]).to be_an Hash
         expect(@config.get(:these_keys_should_be)[:numeric_1].has_key? 10).to be true
         expect(@config.get(:these_keys_should_be)[:numeric_2]).to be_an Array
+        expect(@config.get(:these_keys_should_be)[:numeric_3].has_key? 1.2).to be true
         expect(@config.get(:these_keys_should_be)[:hybrid].has_key? 1337).to be true
+    end
+
+    it 'should find nested values using namespace separators' do
+        expect(@config.get '::bazinga').to eql 'BAZINGA'
+        expect(@config.get :'::bazinga').to eql 'BAZINGA'
+
+        expect(@config.get :'superheroes::1').to eql 'Wolverine'
+        expect(@config.get '::superheroes::1').to eql 'Wolverine'
+
+        expect(@config.get '::chemical_elements').to be_a Hash
+        expect(@config.get :'::chemical_elements::247').to be_a Hash
+        expect(@config.get 'chemical_elements::247::name').to eql 'Zuunium'
     end
 end

@@ -24,6 +24,7 @@
 require 'yaml'
 require 'active_support/core_ext/hash'
 require 'starbound_srv_mgr/exceptions'
+require 'starbound_srv_mgr/core_ext/array'
 
 module StarboundSrvMgr
     class Config
@@ -60,19 +61,25 @@ module StarboundSrvMgr
         #
         # @return [Mixed]
         def get(key, default_value = nil)
-            key = key.to_sym
+            key = key.to_s
 
-            return @config.clone if key == :'::'
+            return @config.clone if key == '::'
 
-            if @config.has_key? key
-                @config[key]
-            else
-                if default_value.nil?
-                    raise StarboundSrvMgr::InvalidConfigKeyError, %q{Config key '%s' not found} % [key]
+            key.gsub! /^::/, ''
+            path = key.split '::'
+
+            result = @config.clone
+
+            begin
+                path.each do |k|
+                    result = find_in(result, k)
                 end
-
-                default_value
+            rescue StarboundSrvMgr::InvalidConfigKeyError => e
+                return default_value unless default_value.nil?
+                raise StarboundSrvMgr::InvalidConfigKeyError, %q{Config key '%s' not found} % [key]
             end
+
+            result
         end
 
         # Alias for #get('::')
@@ -80,6 +87,24 @@ module StarboundSrvMgr
         # @return [Mixed]
         def get_all
             get('::')
+        end
+
+        protected ######################################################################################################
+
+        def find_in(thing, key)
+            case thing
+                when Hash
+                    [key.to_sym, key.to_i, key.to_f].each do |k|
+                        return thing[k] if thing.has_key? k
+                    end
+                when Array
+                    k = key.to_i
+                    return thing[k] if thing.has_key? k
+                else
+                    throw :nothing_found, true
+            end
+
+            raise StarboundSrvMgr::InvalidConfigKeyError, %q{Key '%{key}' not found in %{thing}} % [:key => key, :thing => thing]
         end
 
     end
