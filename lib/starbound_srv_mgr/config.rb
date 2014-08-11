@@ -34,6 +34,7 @@ module StarboundSrvMgr
         # Initialize the config object with a configuration file or hash.
         #
         # @param [String|Hash] config_source
+        #
         # @return [StarboundSrvMgr::Config]
         def initialize(config_source)
             case config_source
@@ -56,6 +57,8 @@ module StarboundSrvMgr
         #
         # @param [String|Symbol] key
         # @param [Mixed]         default_value
+        #
+        # @return [Mixed]
         def get(key, default_value = nil)
             key = key.to_sym
 
@@ -73,6 +76,8 @@ module StarboundSrvMgr
         end
 
         # Alias for #get('::')
+        #
+        # @return [Mixed]
         def get_all
             get('::')
         end
