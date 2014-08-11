@@ -19,10 +19,27 @@
 #
 #
 # Author: Björn R. <x3ro1989@gmail.com>
-# Date:   2014-08-06
+# Date:   2014-08-11
 
-require 'starbound_srv_mgr/version'
+class Array
 
-module StarboundSrvMgr
-    # Your code goes here...
+    # array.has_key?(key)    -> true or false
+    #
+    # Returns <code>true</code> if the given key is present in <i>array</i>.
+    #
+    #    a = ["a", "b", nil]
+    #    a.has_key?(0)   #=> true
+    #    a.has_key?(2)   #=> true
+    #    a.has_key?(3)   #=> false
+    #
+    # @param [Mixed] key
+    #
+    # @return [Bool]
+    def has_key?(key)
+        key = key.to_s if key.is_a? Symbol
+        key = key.to_i unless key.is_a? Integer
+
+        key < self.length
+    end
+
 end

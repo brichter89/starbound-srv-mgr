@@ -19,10 +19,10 @@
 #
 #
 # Author: Björn R. <x3ro1989@gmail.com>
-# Date:   2014-08-06
-
-require 'starbound_srv_mgr/version'
+# Date:   2014-08-10
 
 module StarboundSrvMgr
-    # Your code goes here...
+    class Error < RuntimeError; end
+    class InvalidConfigSourceError < Error; end
+    class InvalidConfigKeyError < Error; end
 end

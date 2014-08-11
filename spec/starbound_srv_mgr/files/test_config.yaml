@@ -1,0 +1,49 @@
+bazinga:              "BAZINGA"
+Day_of_German_Unity:  1990-10-03
+radius_of_earth_km:   6371
+enable_gravity:       true
+π:                    3.14159265358979323846264338327950288
+
+superheroes:
+    - "Spider-Man"
+    - "Wolverine"
+    - "Thor"
+
+chemical_elements:
+    56:
+        symbol: "Ba"
+        name:   "Barium"
+        atomic_weight: 137.327
+    247:
+        symbol: "Z"
+        name:   "Zuunium"
+        atomic_weight: 300
+    53:
+        symbol: "I"
+        name:   "Iodine"
+        atomic_weight: 126.90447
+    7:
+        symbol: "N"
+        name:   "Nitrogen"
+        atomic_weight: 14.00674
+    31:
+        symbol: "Ga"
+        name:   "Gallium"
+        atomic_weight: 69.723
+
+these_keys_should_be:
+    symbols:
+        sym1: 1
+        sym2: 2
+    numeric_1:
+        10: "ten"
+        20: "twenty"
+    numeric_2:
+        - "zero"
+        - "one"
+        - "two"
+    numeric_3:
+        1.2: 'one point two'
+    hybrid:
+        sym: "<- symbol"
+        1337: "<- numeric"
