@@ -22,7 +22,7 @@
 # Date:   2014-08-06
 
 require 'bundler/gem_tasks'
-require 'StarboundSrvMgr/version'
+require 'starbound_srv_mgr/version'
 
 version = StarboundSrvMgr::VERSION
 
