@@ -10,13 +10,29 @@ First see *[Hacking -> What you need](#what-you-need)*
 
 and *[Hacking -> Getting the source](#getting-the-source)*
 
-then install dependencies, build the gem and install it to your system
+You can now *[use it from source](#using-the-source)* **or** install it as a gem:
 
-    $ bundle install --system
-    $ rake build
-    $ gem install --local pkg/starbound-srv-mgr-<version>.gem
+- install dev dependencies (required for running tests)
 
-or just *[use it from source](#using-the-source)*.
+        $ bundle install --path vendor/bundle   # you might have done this already
+
+- install dependencies to your system 
+
+        $ BUNDLE_IGNORE_CONFIG=1 BUNDLE_WITHOUT=development bundle install --system
+    
+- and finally run tests, build the gem and install it to your system
+
+        $ bundle exec rspec                                                             # run tests
+        $ rake build                                                                    # build the gem
+        $ gem install --local pkg/starbound-srv-mgr-<version>.gem                       # and install it to your system
+
+
+
+### Uninstall
+
+Well, that's simple:
+
+    $ gem uninstall starbound-srv-mgr
 
 
 
@@ -55,7 +71,7 @@ Hacking
 ### What you need
 
 - [git](http://git-scm.com/) *(you don't say)*
-- [ruby](https://www.ruby-lang.org/) *(>=1.9)*
+- [ruby](https://www.ruby-lang.org/) *(>=2.0)*
 - [gem](https://rubygems.org/) *(comes with ruby since v1.9)*
 - [bundler](http://bundler.io/) *(`$ gem install bundler`)*
 
