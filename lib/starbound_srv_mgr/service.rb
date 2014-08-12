@@ -31,5 +31,58 @@ module StarboundSrvMgr
 
         end
 
+        # Start the service and return its PID
+        #
+        # @return [Integer]
+        def start
+            # TODO: implement
+        end
+
+        # Stop the service.
+        #
+        # Throws an exception if the service can't be stopped.
+        #
+        # Passing <em>force: true</em> will kill the server instead of
+        # gracefully shutting it down.
+        #
+        # stop()                # try to stop the service
+        # stop(force: true)     # kill the service
+        #
+        # @param [Boolean] force: <>
+        def stop(force: false)
+            # TODO: implement
+        end
+
+        # Restart the service
+        #
+        # A restart is effectively a stop followed by a start of a service.
+        # If the service was not started before, it simply gets started.
+        #
+        # Passing <em>force: true</em> will kill the server instead of
+        # gracefully shutting it down.
+        #
+        # @param [Boolean] force: <>
+        def restart(force: false)
+            stop(force: force)
+            start
+        end
+
+        # Reloads the configuration of a service
+        #
+        # In this case (and in most cases) it results in a simple restart of
+        # the service, to force it reloading its configuration.
+        def force_reload
+            restart
+        end
+
+        # Retrieve the running status of the service
+        #
+        # Returns one of the STATUS_* code constants
+        #
+        # @return [Integer]
+        def status
+            # TODO: implement
+        end
+
     end
 end

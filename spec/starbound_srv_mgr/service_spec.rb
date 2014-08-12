@@ -40,4 +40,14 @@ describe StarboundSrvMgr::Service do
         config = StarboundSrvMgr::Config.new({})
         StarboundSrvMgr::Service.new(config)
     end
+
+    it 'should provide the LSB required actions for init scripts', :skip_before do
+        # LSB required actions for init scripts are:
+        # start, stop, restart, force-reload, status
+        expect(StarboundSrvMgr::Service.method_defined? :start).to be true
+        expect(StarboundSrvMgr::Service.method_defined? :stop).to be true
+        expect(StarboundSrvMgr::Service.method_defined? :restart).to be true
+        expect(StarboundSrvMgr::Service.method_defined? :force_reload).to be true
+        expect(StarboundSrvMgr::Service.method_defined? :status).to be true
+    end
 end
