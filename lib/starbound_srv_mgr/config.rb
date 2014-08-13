@@ -56,11 +56,36 @@ module StarboundSrvMgr
 
         # Get a config value by key.
         #
-        # @param [String|Symbol] key
-        # @param [Mixed]         default_value
+        # The key could be a symbol as well as a string. To get the whole configuration as a Hash, pass '::' as key.
+        # To get nested values, use a namespaced key: 'key_1::key_in_key_1'. (A '::' could be prepended to indicate
+        # the root object: '::key_1::key_in_key_1'.)
         #
-        # @return [Mixed]
-        def get(key, default_value = nil)
+        # If the key could not be found in the config object, an exception is thrown unless a default value is set.
+        #
+        # Examples:
+        #
+        #     config = StarboundSrvMgr::Config.new({
+        #         bazinga: 'BAZINGA',
+        #     })
+        #
+        #     config.get :bazinga                               #=> "BAZINGA"
+        #     config.get :i_do_not_exist, default: 'HELLO :-)'  #=> "HELLO :-)"
+        #     config.get '::'                                   #=> [Hash] of the configuration with all string keys converted to Symbols
+        #
+        # @param [String|Symbol] key                the searched config key
+        # @param [Mixed]         deprecated_default (deprecated) a default value if the key is not found
+        # @param [Mixed]         default:           a default value if the key is not found
+        #
+        # @return [Mixed] The requested config value
+        #
+        # @raise [ArgumentError] if more than two unnamed parameters are passed
+        # @raise [StarboundSrvMgr::InvalidConfigKeyError] if the config key wasn't found and no default value was provided
+        def get(key, *deprecated_default, default: nil)
+            if deprecated_default.length > 1
+                raise ArgumentError, 'wrong number of arguments (%s for 2)' % [deprecated_default.length+1]
+            end
+
+            default = default || deprecated_default[0]
             key = key.to_s
 
             return @config.clone if key == '::'
@@ -75,8 +100,11 @@ module StarboundSrvMgr
                     result = find_in(result, k)
                 end
             rescue StarboundSrvMgr::InvalidConfigKeyError => e
-                return default_value unless default_value.nil?
-                raise StarboundSrvMgr::InvalidConfigKeyError, %q{Config key '%s' not found} % [key]
+                if default.nil?
+                    raise StarboundSrvMgr::InvalidConfigKeyError, %q{Config key '%s' not found} % [key]
+                end
+
+                result = default
             end
 
             result

@@ -25,7 +25,7 @@ require 'starbound_srv_mgr/config'
 require 'starbound_srv_mgr/exceptions'
 
 describe StarboundSrvMgr::Config do
-    CONFIG_FILE = __dir__ + '/files/test_config.yaml'
+    CONFIG_FILE = __dir__ + '/files/config_spec.yaml'
 
     # @var [StarboundSrvMgr::Config]
     @config
@@ -144,5 +144,17 @@ describe StarboundSrvMgr::Config do
         expect(@config.get '::chemical_elements').to be_a Hash
         expect(@config.get :'::chemical_elements::247').to be_a Hash
         expect(@config.get 'chemical_elements::247::name').to eql 'Zuunium'
+    end
+
+    it 'should accept a named parameter for default value' do
+        expect(@config.get :i_do_not_exist, default: 'but f@½# that, im here anyways').to eql 'but f@½# that, im here anyways'
+    end
+
+    it 'should prefer the named default value over the unnamed' do
+        expect(@config.get :i_do_not_exist, 'hello..?', default: 'but f@½# that, im here anyways').to eql 'but f@½# that, im here anyways'
+    end
+
+    it 'should raise an ArgumentError if more than 2 unnamed parameters are passed' do
+        expect { @config.get :key, 'deprecated_default', 'I\'M ALIVE' }.to raise_error ArgumentError, /3 for 2/
     end
 end
