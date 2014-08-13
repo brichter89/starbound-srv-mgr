@@ -25,7 +25,7 @@ require 'starbound_srv_mgr/config'
 require 'starbound_srv_mgr/exceptions'
 
 describe StarboundSrvMgr::Config do
-    CONFIG_FILE = __dir__ + '/files/test_config.yaml'
+    CONFIG_FILE = __dir__ + '/files/config_spec.yaml'
 
     # @var [StarboundSrvMgr::Config]
     @config
@@ -144,5 +144,36 @@ describe StarboundSrvMgr::Config do
         expect(@config.get '::chemical_elements').to be_a Hash
         expect(@config.get :'::chemical_elements::247').to be_a Hash
         expect(@config.get 'chemical_elements::247::name').to eql 'Zuunium'
+    end
+
+    it 'should accept a named parameter for default value' do
+        expect(@config.get :i_do_not_exist, default: 'but f@½# that, im here anyways').to eql 'but f@½# that, im here anyways'
+    end
+
+    it 'should prefer the named default value over the unnamed' do
+        expect(@config.get :i_do_not_exist, 'hello..?', default: 'but f@½# that, im here anyways').to eql 'but f@½# that, im here anyways'
+    end
+
+    it 'should raise an ArgumentError if more than 2 unnamed parameters are passed' do
+        expect { @config.get :key, 'deprecated_default', 'I\'M ALIVE' }.to raise_error ArgumentError, /3 for 2/
+    end
+
+    it 'should format strings if replacements are passed as named parameter' do
+        expect(@config.get '::Asimovs_Laws::1', replace: {:subject => 'robot', :object => 'human being'})
+            .to eql 'A robot may not injure a human being or, through inaction, allow a human being to come to harm.'
+        expect(@config.get '::Asimovs_Laws::2', replace: ['robot', 'human beings'])
+            .to eql 'A robot must obey the orders given to it by human beings, except where such orders would conflict with the First Law.'
+        expect(@config.get '::Asimovs_Laws::3', replace: %w(First Second robot))
+            .to eql 'A robot must protect its own existence as long as such protection does not conflict with the First or Second Law.'
+    end
+
+    it 'should format default value strings if replacements are passed as named parameter' do
+        default_unnamed = 'Sheldon says: %s.'
+        default_named = 'The Answer to the Ultimate Question of Life, the Universe, and Everything is %{answer}.'
+
+        expect(@config.get :i_do_not_exist, default: default_unnamed, replace: '*knock knock knock* Penny')
+            .to eql 'Sheldon says: *knock knock knock* Penny.'
+        expect(@config.get :i_do_not_exist, default: default_named, replace: {:answer => 42})
+            .to eql 'The Answer to the Ultimate Question of Life, the Universe, and Everything is 42.'
     end
 end

@@ -56,11 +56,58 @@ module StarboundSrvMgr
 
         # Get a config value by key.
         #
-        # @param [String|Symbol] key
-        # @param [Mixed]         default_value
+        # The key could be a symbol as well as a string. To get the whole configuration as a Hash, pass '::' as key.
+        # To get nested values, use a namespaced key: 'key_1::key_in_key_1'. (A '::' could be prepended to indicate
+        # the root object: '::key_1::key_in_key_1'.)
         #
-        # @return [Mixed]
-        def get(key, default_value = nil)
+        # If the key could not be found in the config object, an exception is thrown unless a default value is set.
+        #
+        # Strings could be formatted according to the **#fprints()** method.
+        #
+        # See also: [#fprints()](http://www.ruby-doc.org/core-2.1.2/Kernel.html#method-i-sprintf)
+        #
+        # Examples:
+        #
+        #     config = StarboundSrvMgr::Config.new({
+        #         bazinga: 'BAZINGA',
+        #         Asimovs_Laws: {
+        #             1 => 'A %{subject} may not injure a %{object} or, through inaction, allow a %{object} to come to harm.',
+        #             2 => 'A %s must obey the orders given to it by %s, except where such orders would conflict with the First Law.',
+        #             3 => 'A %3$s must protect its own existence as long as such protection does not conflict with the %1$s or %2$s Law.',
+        #         }
+        #     })
+        #
+        #     config.get :bazinga                               #=> "BAZINGA"
+        #     config.get :i_do_not_exist, default: 'HELLO :-)'  #=> "HELLO :-)"
+        #     config.get '::'                                   #=> [Hash] of the configuration with all string keys converted to Symbols
+        #     config.get 'Asimovs_Laws'                         #=> [Hash] of 'Asimovs_Laws'
+        #
+        #     # Replacements
+        #     config.get '::Asimovs_Laws::1', replace: {:subject => 'robot', :object => 'human being'}
+        #                                                       #=> "A robot may not injure a human being or, through inaction, allow a human being to come to harm."
+        #     config.get '::Asimovs_Laws::2', replace: ['robot', 'human beings']
+        #                                                       #=> "A robot must obey the orders given to it by human beings, except where such orders would conflict with the First Law."
+        #     config.get '::Asimovs_Laws::3', replace: %w(First Second robot)
+        #                                                       #=> "A robot must protect its own existence as long as such protection does not conflict with the First or Second Law."
+        #     config.get :answer,
+        #                default: 'The Answer to the Ultimate Question of Life, the Universe, and Everything is %{answer}',
+        #                replace: {:answer => 42}               #=> "The Answer to the Ultimate Question of Life, the Universe, and Everything is 42"
+        #
+        # @param [String|Symbol] key                the searched config key
+        # @param [Mixed]         deprecated_default (deprecated) a default value if the key is not found
+        # @param [Mixed]         default:           a default value if the key is not found
+        # @param [Array|Hash]    replace:           the values that should be replaced in the string
+        #
+        # @return [Mixed] The requested config value
+        #
+        # @raise [ArgumentError] if more than two unnamed parameters are passed
+        # @raise [StarboundSrvMgr::InvalidConfigKeyError] if the config key wasn't found and no default value was provided
+        def get(key, *deprecated_default, default: nil, replace: nil)
+            if deprecated_default.length > 1
+                raise ArgumentError, 'wrong number of arguments (%s for 2)' % [deprecated_default.length+1]
+            end
+
+            default = default || deprecated_default[0]
             key = key.to_s
 
             return @config.clone if key == '::'
@@ -75,8 +122,15 @@ module StarboundSrvMgr
                     result = find_in(result, k)
                 end
             rescue StarboundSrvMgr::InvalidConfigKeyError => e
-                return default_value unless default_value.nil?
-                raise StarboundSrvMgr::InvalidConfigKeyError, %q{Config key '%s' not found} % [key]
+                if default.nil?
+                    raise StarboundSrvMgr::InvalidConfigKeyError, %q{Config key '%s' not found} % [key]
+                end
+
+                result = default
+            end
+
+            if replace && result.is_a?(String)
+                result = result % replace
             end
 
             result
