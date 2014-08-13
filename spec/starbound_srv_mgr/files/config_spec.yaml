@@ -47,3 +47,8 @@ these_keys_should_be:
     hybrid:
         sym: "<- symbol"
         1337: "<- numeric"
+
+Asimovs_Laws:
+    1: "A %{subject} may not injure a %{object} or, through inaction, allow a %{object} to come to harm."
+    2: "A %s must obey the orders given to it by %s, except where such orders would conflict with the First Law."
+    3: "A %3$s must protect its own existence as long as such protection does not conflict with the %1$s or %2$s Law."
