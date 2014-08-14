@@ -34,9 +34,22 @@ module StarboundSrvMgr
 
         # Initialize the config object with a configuration file or hash.
         #
+        # Examples:
+        #
+        #     config_1 = StarboundSrvMgr::Config.new('/path/to/config.yaml')
+        #
+        #     config_2 = StarboundSrvMgr::Config.new({
+        #         bazinga: 'BAZINGA',
+        #         Asimovs_Laws: {
+        #             1 => 'A %{subject} may not injure a %{object} or, through inaction, allow a %{object} to come to harm.',
+        #             2 => 'A %s must obey the orders given to it by %s, except where such orders would conflict with the First Law.',
+        #             3 => 'A %3$s must protect its own existence as long as such protection does not conflict with the %1$s or %2$s Law.',
+        #         }
+        #     })
+        #
         # @param [String|Hash] config_source
         #
-        # @return [StarboundSrvMgr::Config]
+        # @raise [StarboundSrvMgr::InvalidConfigSourceError] if the config file could not be found or it's not a [Hash]
         def initialize(config_source)
             case config_source
                 when String
@@ -57,14 +70,16 @@ module StarboundSrvMgr
         # Get a config value by key.
         #
         # The key could be a symbol as well as a string. To get the whole configuration as a Hash, pass '::' as key.
+        # This will return a clone of the actual config Hash to prevent manipulation.
+        #
         # To get nested values, use a namespaced key: 'key_1::key_in_key_1'. (A '::' could be prepended to indicate
         # the root object: '::key_1::key_in_key_1'.)
         #
-        # If the key could not be found in the config object, an exception is thrown unless a default value is set.
+        # If the key could not be found in the config Hash, it raises an error unless a default value is set.
         #
         # Strings could be formatted according to the **#fprints()** method.
         #
-        # See also: [#fprints()](http://www.ruby-doc.org/core-2.1.2/Kernel.html#method-i-sprintf)
+        # See also: [#ftrints()](http://www.ruby-doc.org/core-2.1.2/Kernel.html#method-i-sprintf)
         #
         # Examples:
         #
@@ -136,9 +151,9 @@ module StarboundSrvMgr
             result
         end
 
-        # Alias for #get('::')
+        # Alias for {StarboundSrvMgr::Config#get #get('::')}
         #
-        # @return [Mixed]
+        # @return [Hash] The whole config hash
         def get_all
             get('::')
         end
